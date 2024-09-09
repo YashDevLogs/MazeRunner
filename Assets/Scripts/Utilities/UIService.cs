@@ -8,9 +8,11 @@ public class UIService : MonoBehaviour
     [SerializeField] private TextMeshProUGUI finalTimeText;
     [SerializeField] private GameObject gameWonPanel;
     [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private GameObject instructionsPanel;
     [SerializeField] private Button retryButton;
     [SerializeField] private Button nextLevelButton;
     [SerializeField] private Slider fuelSliderUI;
+    private bool isGameStarted = false;
 
     private float timer;
 
@@ -18,8 +20,22 @@ public class UIService : MonoBehaviour
     {
         retryButton.onClick.AddListener(() => onRetry.Invoke());
         nextLevelButton.onClick.AddListener(() => onNextLevel.Invoke());
-        gameWonPanel.SetActive(false);
-        gameOverPanel.SetActive(false);
+
+
+    }
+
+    private void Start()
+    {
+        instructionsPanel.SetActive(true);
+    }
+
+    void Update()
+    {
+        if (!isGameStarted && instructionsPanel.activeSelf && Input.anyKeyDown)
+        {
+            HideInstructionsPanel();
+            isGameStarted = true;
+        }
     }
 
     public void StartTimer()
@@ -59,5 +75,10 @@ public class UIService : MonoBehaviour
     public void UpdateFuelSlider(float fuelPercentage)
     {
         fuelSliderUI.value = fuelPercentage;
+    }
+
+    private void HideInstructionsPanel()
+    {
+        instructionsPanel.SetActive(false);
     }
 }
